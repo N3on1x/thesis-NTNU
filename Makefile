@@ -11,7 +11,7 @@ SRCS=\
 	glossary.tex \
 	thesis.tex
 
-LATEX_FLAGS=-shell-escape
+LATEX_FLAGS=-shell-escape -file-line-error
 BIBER_FLAGS=
 
 mkdir = @mkdir -p $(@D)
@@ -27,5 +27,13 @@ thesis.pdf: $(SRCS)
 clean:
 	-@$(RM) \
 		$(wildcard thesis-gnuplottex*) \
-		$(addprefix thesis,.gnuploterrors .aux .bbl .bcf .blg .lof .log .lol .lot .out .pdf .run.xml .toc .acn .glo .ist .acr .alg .glg .gls)
+		$(addprefix thesis,.gnuploterrors .aux .bbl .bcf .blg .lof .log .lol .lot .out .pdf .run.xml .toc .acn .glo .ist .acr .alg .glg .gls .fdb_latexmk .fls .synctex.gz)
 .PHONY: clean
+
+.PHONY: auto-compile
+auto-compile: $(SRCS)
+	latexmk \
+		-silent -pdf -pvc -view=none \
+		-r "conf/glossaries.latexmk" \
+		-pdflatex="pdflatex -interaction=nonstopmode -synctex=1 $(LATEX_FLAGS)" \
+		thesis

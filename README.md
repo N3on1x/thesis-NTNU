@@ -21,4 +21,26 @@ There are two ways for setting up the [**Overleaf**](http://overleaf.com) projec
 
 ### Building document locally
 
-The template also provides a simple `Makefile` which allows you to build the document locally. This requires that you have a LaTeX compiler, such as [`texlive`](https://www.tug.org/texlive/), installed locally, which has to provide the commands `pdflatex` and `biber`.
+The template also provides a simple `Makefile` which allows you to build the
+document locally using the build automation tool
+[`make`](https://www.wikiwand.com/en/Make_(software)). This requires that you
+have a LaTeX compiler, such as [`texlive`](https://www.tug.org/texlive/),
+installed locally, which has to provide the commands `pdflatex` and `biber`.
+Also, if you want to produce graphs using `gnuplot` as demonstrated in the
+template, you will need to have [`gnuplot`](http://www.gnuplot.info/) and [`gs`
+(GhostScript)](https://www.ghostscript.com/) installed.
+
+To build the document once, run the command:
+
+```sh
+make
+```
+
+You can also use the `latexmk` command (included in the TeX Live distribution),
+to automatically build the document every time you update a source file. For
+simplicity, this is also available as a `make` rule. To start continuous
+compilation of the document run the command:
+
+```sh
+make auto-compile
+```
