@@ -14,6 +14,10 @@ SRCS=\
 LATEX_FLAGS=-shell-escape -file-line-error
 BIBER_FLAGS=
 
+DOCKER_MOUNT_SOURCE = $(CURDIR)
+DOCKER_MOUNT_TARGET = /home/thesis-NTNU
+DOCKER_CONTAINER_NAME = thesis_ntnu
+
 mkdir = @mkdir -p $(@D)
 
 thesis.pdf: $(SRCS)
@@ -37,3 +41,18 @@ auto-compile: $(SRCS)
 		-r "conf/glossaries.latexmk" \
 		-pdflatex="pdflatex -interaction=nonstopmode -synctex=1 $(LATEX_FLAGS)" \
 		thesis
+
+.PHONY: docker-build
+docker-build: docker/Dockerfile
+	docker build -t thesis-ntnu -	< docker/Dockerfile
+
+.PHONY: docker-run
+docker-run:
+	docker run --rm -it \
+		--name $(DOCKER_CONTAINER_NAME) \
+		--mount type=bind,source="$(DOCKER_MOUNT_SOURCE)",target=$(DOCKER_MOUNT_TARGET) \
+		thesis-ntnu
+
+.PHONY: docker-stop
+docker-stop:
+	docker stop $(DOCKER_CONTAINER_NAME)
